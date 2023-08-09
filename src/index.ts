@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer";
 import Linkedin from "./objects";
-import { connectDb } from "./config";
 
 (async () => {
 	const browser = await puppeteer.launch({
@@ -14,7 +13,7 @@ import { connectDb } from "./config";
 	const currentTab = await browser.newPage();
 	const linkedin = new Linkedin(currentTab);
 
-	await linkedin.search("node.js");
+	await linkedin.search("desenvolvedor full stack");
 	await linkedin.scrape(10);
 	console.log("Foi");
 

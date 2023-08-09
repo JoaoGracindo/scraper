@@ -32,11 +32,11 @@ export default class Linkedin {
 	}
 
 	private async save(data: Job) {
-        const hasOnDb = await this.prisma.job.findUnique({
-            where: {
-                url: data.url
-            }
-        });
+		const hasOnDb = await this.prisma.job.findUnique({
+			where: {
+				url: data.url,
+			},
+		});
 		if (hasOnDb) return;
 		await this.prisma.job.create({
 			data,
@@ -44,15 +44,15 @@ export default class Linkedin {
 	}
 
 	public async getJobInfo() {
-		const element = await this.page.evaluate(() =>
-			Array.from(
-				document.querySelectorAll(
+		const element = await this.page.evaluate(
+			() =>
+				document.querySelector(
 					"div.jobs-unified-top-card__primary-description span.tvm__text"
-				),
-				(e) => e.textContent
-			)
+				).textContent
 		);
-		const time = element[0].trim();
+
+		const time = element.split("\n")[1].trim();
+		console.log(time);
 
 		const description = await this.page.evaluate(
 			() =>
@@ -131,7 +131,7 @@ export default class Linkedin {
 		let nextPage = 2;
 		await this.page.waitForSelector(`button[aria-label="Página ${nextPage}"]`);
 		const jobsInfo = [];
-		while (jobsInfo.length < total) {
+		for (let i = 0; i < total; i++) {
 			const jobsId = await this.getJobsId();
 			const jobInfo = await this.scrapePage(jobsId);
 			jobsInfo.push(jobInfo);
