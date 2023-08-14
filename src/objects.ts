@@ -126,18 +126,17 @@ export default class Linkedin {
 		}
 	}
 
-	public async scrape(total: number) {
-		let nextPage = 2;
-		await this.page.waitForSelector(`button[aria-label="Página ${nextPage}"]`);
-		const jobsInfo = [];
-		for (let i = 0; i < total; i++) {
+	public async scrape(totalPages: number) {
+		const url = new URL(this.page.url());
+		for (let i = 1; i <= totalPages; i++) {
 			const jobsId = await this.getJobsId();
-			const jobInfo = await this.scrapePage(jobsId);
-			jobsInfo.push(jobInfo);
-			await this.goToPage(nextPage);
-			nextPage++;
+			await this.scrapePage(jobsId);
+			url.searchParams.set("start", String(i * 25));
+			await this.page.goto(url.href);
+			await this.page.waitForSelector(
+				"div.jobs-unified-top-card__primary-description"
+			);
 		}
-		return jobsInfo;
 	}
 
 	public async search(queryString: string) {
@@ -148,6 +147,7 @@ export default class Linkedin {
 			queryString
 		);
 		await this.page.keyboard.down("Enter");
+		await this.page.waitForNavigation();
 	}
 
 	public filterJobs(job: Job): boolean {
@@ -156,7 +156,6 @@ export default class Linkedin {
 		const localPattern = /(remoto)|(rio de janeiro)/i;
 		const rightTimePeriod = timePattern.test(time);
 		const rightLocal = localPattern.test(local);
-		console.log(time, rightTimePeriod);
 
 		if (rightLocal && rightTimePeriod) return true;
 
