@@ -37,7 +37,7 @@ export default class Linkedin {
 				url: data.url,
 			},
 		});
-		if (hasOnDb) return;
+		if (hasOnDb || !this.filterJobs(data)) return;
 		await this.prisma.job.create({
 			data,
 		});
@@ -52,7 +52,6 @@ export default class Linkedin {
 		);
 
 		const time = element.split("\n")[1].trim();
-		console.log(time);
 
 		const description = await this.page.evaluate(
 			() =>
@@ -149,5 +148,18 @@ export default class Linkedin {
 			queryString
 		);
 		await this.page.keyboard.down("Enter");
+	}
+
+	public filterJobs(job: Job): boolean {
+		const { time, local } = job;
+		const timePattern = /dias?|horas?|minutos?/i;
+		const localPattern = /(remoto)|(rio de janeiro)/i;
+		const rightTimePeriod = timePattern.test(time);
+		const rightLocal = localPattern.test(local);
+		console.log(time, rightTimePeriod);
+
+		if (rightLocal && rightTimePeriod) return true;
+
+		return false;
 	}
 }

@@ -13,8 +13,11 @@ import Linkedin from "./objects";
 	const currentTab = await browser.newPage();
 	const linkedin = new Linkedin(currentTab);
 
-	await linkedin.search("desenvolvedor full stack");
-	await linkedin.scrape(10);
+	const searchArray = ['node', 'nodejs', 'spring', 'java'];
+	for(let i in searchArray) {
+		await linkedin.search(searchArray[i]);
+		await linkedin.scrape(2);
+	}
 	console.log("Foi");
 
 	browser.close();
