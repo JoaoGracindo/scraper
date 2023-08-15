@@ -3,14 +3,7 @@ import { prisma, connectDb } from "./config";
 import dotenv from "dotenv";
 dotenv.config();
 
-type Job = {
-	time: string;
-	local: string;
-	company: string;
-	url: string;
-	jobDescription: string;
-};
-
+import { Job } from "./protocols";
 export default class Linkedin {
 	private page;
 	private prisma;
@@ -88,15 +81,7 @@ export default class Linkedin {
 			.filter((link) => regex.test(link))
 			.map((link) => link.split("/")[5]);
 	}
-
-	private async goToPage(number: number) {
-		await this.page.waitForSelector(`button[aria-label="Página ${number}"]`);
-		await this.page.click(`button[aria-label="Página ${number}"]`);
-		await this.page.waitForSelector(
-			`button[aria-label="Página ${number + 1}"]`
-		);
-	}
-
+	
 	private async goToJob(id: string) {
 		const url = this.page.url();
 		const urlInstance = new URL(url);
