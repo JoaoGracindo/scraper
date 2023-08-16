@@ -6,7 +6,7 @@ import Linkedin from "./objects";
 		executablePath: "/bin/google-chrome-stable",
 		slowMo: 100,
 		userDataDir: process.env.USER_DIR,
-		//headless: false,
+		headless: false,
 		defaultViewport: null,
 	});
 
@@ -19,7 +19,6 @@ import Linkedin from "./objects";
 		await linkedin.search(searchArray[i]);
 		await linkedin.scrape(2);
 	}
-	console.log("Foi");
 
 	browser.close();
 })();
