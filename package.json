@@ -2,8 +2,7 @@
   "name": "cv-maker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
@@ -29,6 +28,8 @@
     "prisma": "^5.1.1",
     "puppeteer": "^21.0.3",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "ttypescript": "^1.5.15",
     "typescript": "^5.1.6",
     "typescript-transform-paths": "^3.4.6"
   }
