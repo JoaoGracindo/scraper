@@ -7,13 +7,17 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function gptPrompt() {
+async function gptPrompt(description: string) {
 	return await openai.createChatCompletion({
 		messages: [
 			{
 				role: "system",
-				content: "hellow world",
+				content: "Voce é um programa que vai me ajudar a conseguir um emprego.",
 			},
+			{
+				role: "user",
+				content: `resuma essa descrição de emprego: ${description}`
+			}
 		],
 		model: "gpt-3.5-turbo",
 	});
