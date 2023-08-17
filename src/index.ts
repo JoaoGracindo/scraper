@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
-import { openai } from "./gpt";
-import inquirer from 'inquirer';
 import { config } from "dotenv";
+import inquirer from "inquirer";
+import { gptPrompt } from "./gpt";
 config();
 
 (async () => {
@@ -13,15 +13,14 @@ config();
 		defaultViewport: null,
 	});
 
-	const completion = await openai.createChatCompletion({
-		messages: [{ 
-			role: "system",
-			content: "hellow world",
-			 }],
-		model: "gpt-3.5-turbo",
-	})
+	const answers = await inquirer.prompt({
+		type: "input",
+		message: "build CV? (y/n)",
+		name: "validation",
+	});
 
-	console.log(completion.data.choices[0].message.content);
+	if(answers.validation === "y") console.log('true');
+	if(answers.validation === "n") console.log('false');
 
 	browser.close();
 })();

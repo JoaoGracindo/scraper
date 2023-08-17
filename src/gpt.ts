@@ -3,8 +3,20 @@ import { config } from "dotenv";
 config();
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY
-})
+	apiKey: process.env.OPENAI_API_KEY,
+});
 const openai = new OpenAIApi(configuration);
 
-export {openai};
+async function gptPrompt() {
+	return await openai.createChatCompletion({
+		messages: [
+			{
+				role: "system",
+				content: "hellow world",
+			},
+		],
+		model: "gpt-3.5-turbo",
+	});
+}
+
+export { openai, gptPrompt };
