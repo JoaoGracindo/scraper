@@ -20,7 +20,7 @@ config();
 		model: "gpt-3.5-turbo",
 	})
 
-	console.log(completion.data.choices[0].message)
+	console.log(completion.data.choices[0].message.content);
 
 	browser.close();
 })();
