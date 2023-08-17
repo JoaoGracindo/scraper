@@ -4,13 +4,13 @@ import { config } from "dotenv";
 config();
 
 (async () => {
-	// const browser = await puppeteer.launch({
-	// 	executablePath: "/bin/google-chrome-stable",
-	// 	slowMo: 100,
-	// 	userDataDir: process.env.USER_DIR,
-	// 	headless: false,
-	// 	defaultViewport: null,
-	// });
+	const browser = await puppeteer.launch({
+		executablePath: "/bin/google-chrome-stable",
+		slowMo: 100,
+		userDataDir: process.env.USER_DIR,
+		headless: false,
+		defaultViewport: null,
+	});
 
 	const completion = await openai.createChatCompletion({
 		messages: [{ 
@@ -22,5 +22,5 @@ config();
 
 	console.log(completion.data.choices[0].message)
 
-	// browser.close();
+	browser.close();
 })();
