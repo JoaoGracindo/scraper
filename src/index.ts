@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { openai } from "./gpt";
+import inquirer from 'inquirer';
 import { config } from "dotenv";
 config();
 
