@@ -15,4 +15,6 @@ model Job {
   company        String
   jobDescription String
   createdAt      DateTime @default(now())
+  analyzed       Boolean  @default(false)
+  approved       Boolean  @default(false)
 }

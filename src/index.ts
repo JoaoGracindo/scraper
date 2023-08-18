@@ -8,7 +8,7 @@ config();
 (async () => {
 	connectDb();
 	const jobs = await prisma.job.findMany();
-
+	disconnectDB();
 	const browser = await puppeteer.launch({
 		executablePath: "/bin/google-chrome-stable",
 		slowMo: 100,
