@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,11 +8,13 @@ datasource db {
 }
 
 model Job {
-  id  Int  @id @default(autoincrement())
-  url String @unique
-  time String
-  local String
-  company String
+  id             Int      @id @default(autoincrement())
+  url            String   @unique
+  time           String
+  local          String
+  company        String
   jobDescription String
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+  analyzed       Boolean  @default(false)
+  approved       Boolean  @default(false)
 }

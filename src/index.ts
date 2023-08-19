@@ -13,12 +13,12 @@ import Linkedin from "./objects";
 	const currentTab = await browser.newPage();
 	const linkedin = new Linkedin(currentTab);
 
-	const searchArray = ['node', 'nodejs', 'spring', 'java'];
+	const searchArray = ['node', 'java', 'nodejs', 'spring'];
 	for(let i in searchArray) {
-		console.log(' looking for ', searchArray[i]);
+		console.log('looking for', searchArray[i]);
 		await linkedin.search(searchArray[i]);
 		await linkedin.scrape(2);
 	}
-
+	console.log('Done!')
 	browser.close();
 })();
