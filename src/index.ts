@@ -6,14 +6,14 @@ import Linkedin from "./objects";
 		executablePath: "/bin/google-chrome-stable",
 		slowMo: 100,
 		userDataDir: process.env.USER_DIR,
-		headless: false,
+		//headless: false,
 		defaultViewport: null,
 	});
 
 	const currentTab = await browser.newPage();
 	const linkedin = new Linkedin(currentTab);
 
-	const searchArray = ['node', 'java', 'nodejs', 'spring'];
+	const searchArray = ['node', 'java junior', 'back end nodejs', 'desenvolvedor junior'];
 	for(let i in searchArray) {
 		console.log('looking for', searchArray[i]);
 		await linkedin.search(searchArray[i]);

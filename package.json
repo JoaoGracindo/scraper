@@ -19,10 +19,16 @@
     "nodemon": "^3.0.1",
     "prisma": "^5.1.1",
     "puppeteer": "^21.0.1",
+    "inquirer": "^8.2.6",
+    "nanospinner": "^1.1.0",
+    "openai": "^3.3.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "ttypescript": "^1.5.15",
     "typescript": "^5.1.6",
     "typescript-transform-paths": "^3.4.6"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3"
   }
 }
