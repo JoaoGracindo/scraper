@@ -17,10 +17,23 @@ import { gptPrompt } from "./gpt";
 	if (answers.script === "display") {
 		const jobs = await prisma.job.findMany({
 			where: {
-				approved: true,
+				key_words: {
+					not: null
+				},
 			},
 		});
 		for (let i in jobs) {
+			console.log(jobs[i].key_words);
+			
+			const answer = await inquirer.prompt({
+				type: "list",
+				message: "which script should i use?\n",
+				name: "approved",
+				choices: ["yes", "no"],
+			});
+			
+			console.clear();
+			if(answer.approved === "no") continue;
 			const browser = await puppeteer.launch({
 				executablePath: "/bin/google-chrome-stable",
 				slowMo: 100,
@@ -34,7 +47,11 @@ import { gptPrompt } from "./gpt";
 	}
 
 	if (answers.script === "analyze") {
-		const jobs = await prisma.job.findMany();
+		const jobs = await prisma.job.findMany({
+			where: {
+				key_words: null
+			}
+		});
 		for (let i in jobs) {
 			try {
 				await gptPrompt(jobs[i]);
@@ -56,11 +73,10 @@ import { gptPrompt } from "./gpt";
 		const linkedin = new Linkedin(currentTab);
 
 		const searchArray = [
-			"nodejs",
-			"desenvolvedor Java",
-			"java junior",
-			"backend nodejs",
+			"node",
 			"desenvolvedor junior",
+			"desenvolvedor java",
+			"backend nodejs",
 		];
 		for (let i in searchArray) {
 			console.log("looking for", searchArray[i]);
