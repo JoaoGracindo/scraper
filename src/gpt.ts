@@ -17,10 +17,10 @@ async function gptPrompt(job: Job) {
 			},
 			{
 				role: "user",
-				content: `liste os requesitos e outras informações importantes desta vaga: ${job.jobDescription}`
+				content: `liste as palavras-chave desta vaga: ${job.jobDescription}`
 			}
 		],
-		model: "gpt-4",
+		model: "gpt-3.5-turbo",
 	});
 
 	const response = chatCompletion.data.choices[0].message.content;

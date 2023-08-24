@@ -2,10 +2,10 @@ import puppeteer from "puppeteer";
 import Linkedin from "./objects";
 import inquirer from "inquirer";
 import { connectDb, disconnectDB, prisma } from "./config";
+import { gptPrompt } from "./gpt";
 
 (async () => {
 	connectDb();
-	const jobs = await prisma.job.findMany();
 
 	const answers = await inquirer.prompt({
 		type: "list",
@@ -15,6 +15,11 @@ import { connectDb, disconnectDB, prisma } from "./config";
 	});
 
 	if (answers.script === "display") {
+		const jobs = await prisma.job.findMany({
+			where: {
+				approved: true,
+			},
+		});
 		for (let i in jobs) {
 			const browser = await puppeteer.launch({
 				executablePath: "/bin/google-chrome-stable",
@@ -29,7 +34,14 @@ import { connectDb, disconnectDB, prisma } from "./config";
 	}
 
 	if (answers.script === "analyze") {
+		const jobs = await prisma.job.findMany();
 		for (let i in jobs) {
+			let answer;
+			try {
+				answer = await gptPrompt(jobs[i]);
+			} catch (err) {
+				console.log(err);
+			}
 			await prisma.job.update({
 				where: {
 					id: jobs[i].id,
@@ -38,41 +50,36 @@ import { connectDb, disconnectDB, prisma } from "./config";
 					analyzed: true,
 				},
 			});
-
-			prisma.job.update({
-				where: {
-					id: jobs[i].id,
-				},
-				data: {
-					approved: true,
-				},
-			});
+			console.log(answer);
 		}
 	}
 
-	const browser = await puppeteer.launch({
-		executablePath: "/bin/google-chrome-stable",
-		slowMo: 100,
-		userDataDir: process.env.USER_DIR,
-		defaultViewport: null,
-	});
+	if (answers.script === "find jobs") {
+		const browser = await puppeteer.launch({
+			executablePath: "/bin/google-chrome-stable",
+			slowMo: 100,
+			userDataDir: process.env.USER_DIR,
+			defaultViewport: null,
+		});
 
-	const currentTab = await browser.newPage();
-	const linkedin = new Linkedin(currentTab);
+		const currentTab = await browser.newPage();
+		const linkedin = new Linkedin(currentTab);
 
-	const searchArray = [
-		"nodejs",
-		"desenvolvedor Java",
-		"java junior",
-		"backend nodejs",
-		"desenvolvedor junior",
-	];
-	for (let i in searchArray) {
-		console.log("looking for", searchArray[i]);
-		await linkedin.search(searchArray[i]);
-		await linkedin.scrape(2);
+		const searchArray = [
+			"nodejs",
+			"desenvolvedor Java",
+			"java junior",
+			"backend nodejs",
+			"desenvolvedor junior",
+		];
+		for (let i in searchArray) {
+			console.log("looking for", searchArray[i]);
+			await linkedin.search(searchArray[i]);
+			await linkedin.scrape(2);
+		}
+		console.log("Done!");
+		browser.close();
 	}
-	console.log("Done!");
+
 	disconnectDB();
-	browser.close();
 })();
