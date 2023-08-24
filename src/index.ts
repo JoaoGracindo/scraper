@@ -36,21 +36,11 @@ import { gptPrompt } from "./gpt";
 	if (answers.script === "analyze") {
 		const jobs = await prisma.job.findMany();
 		for (let i in jobs) {
-			let answer;
 			try {
-				answer = await gptPrompt(jobs[i]);
+				await gptPrompt(jobs[i]);
 			} catch (err) {
-				console.log(err);
+				console.log(err.data);
 			}
-			await prisma.job.update({
-				where: {
-					id: jobs[i].id,
-				},
-				data: {
-					analyzed: true,
-				},
-			});
-			console.log(answer);
 		}
 	}
 

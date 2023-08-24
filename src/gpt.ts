@@ -1,6 +1,7 @@
 import { OpenAIApi, Configuration } from "openai";
 import { config } from "dotenv";
 import { Job } from "@prisma/client";
+import { prisma } from "./config";
 config();
 
 const configuration = new Configuration({
@@ -17,14 +18,21 @@ async function gptPrompt(job: Job) {
 			},
 			{
 				role: "user",
-				content: `liste as palavras-chave desta vaga: ${job.jobDescription}`
+				content: `liste as informações importantes como a stack e requesitos desta vaga: ${job.jobDescription}`
 			}
 		],
 		model: "gpt-3.5-turbo",
 	});
 
 	const response = chatCompletion.data.choices[0].message.content;
-	return response;
+	await prisma.job.update({
+		where: {
+			id: job.id
+		},
+		data: {
+			key_words: response
+		}
+	})
 }
 
 export { openai, gptPrompt };

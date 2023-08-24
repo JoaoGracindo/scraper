@@ -14,6 +14,7 @@ model Job {
   local          String
   company        String
   jobDescription String
+  key_words      String?
   createdAt      DateTime @default(now())
   analyzed       Boolean  @default(false)
   approved       Boolean  @default(false)
