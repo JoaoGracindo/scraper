@@ -17,4 +17,5 @@ model Job {
   key_words      String?
   createdAt      DateTime @default(now())
   approved       Boolean  @default(false)
+  analyzed       Boolean  @default(false)
 }

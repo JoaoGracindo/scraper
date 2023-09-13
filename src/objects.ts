@@ -87,6 +87,7 @@ export default class Linkedin {
 		const urlInstance = new URL(url);
 		urlInstance.searchParams.set("currentJobId", id);
 		await this.page.goto(urlInstance.href);
+		setTimeout(() => {}, 100);
 		await this.page.waitForSelector(
 			"div.jobs-unified-top-card__primary-description"
 		);
@@ -94,6 +95,7 @@ export default class Linkedin {
 
 	public async scrapeJob(id: string): Promise<void> {
 		await this.goToJob(id);
+		await this.page.waitForNavigation();
 		const url = this.page.url();
 		const jobUrl = new URL(url).href;
 
@@ -119,7 +121,10 @@ export default class Linkedin {
 			url.searchParams.set("start", String(i * 25));
 			await this.page.goto(url.href);
 			await this.page.waitForSelector(
-				"div.jobs-unified-top-card__primary-description"
+				"div.jobs-unified-top-card__primary-description",
+				{
+					timeout: 60000
+				}
 			);
 		}
 	}
