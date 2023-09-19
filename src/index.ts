@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import Linkedin from "./objects";
+import Linkedin from "./linkedinPage";
 import inquirer from "inquirer";
 import { connectDb, disconnectDB, prisma } from "./config";
 import { gptPrompt } from "./gpt";
@@ -20,7 +20,6 @@ import { gptPrompt } from "./gpt";
 				key_words: {
 					not: null,
 				},
-				analyzed: false,
 			},
 		});
 		for (let i in jobs) {
@@ -28,27 +27,19 @@ import { gptPrompt } from "./gpt";
 
 			const answer = await inquirer.prompt({
 				type: "list",
-				message: "approved?\n",
-				name: "approved",
+				message: "applied?\n",
+				name: "applied",
 				choices: ["yes", "no"],
 			});
 			console.clear();
-			await prisma.job.update({
-				where: {
-					id: jobs[i].id,
-				},
-				data: {
-					analyzed: true,
-				},
-			});
-			if (answer.approved === "no") continue;
+			if (answer.applied === "no") continue;
 
 			await prisma.job.update({
 				where: {
 					id: jobs[i].id,
 				},
 				data: {
-					approved: true,
+					applied: true,
 				},
 			});
 
@@ -91,12 +82,12 @@ import { gptPrompt } from "./gpt";
 		const currentTab = await browser.newPage();
 		const linkedin = new Linkedin(currentTab);
 
-		const searchArray = ["backend developer", "full-stack node", "desenvolvedor node", "desenvolvedor nodejs", "desenvolvedor typescript"];
+		const searchArray = ["desenvolvedor node", "desenvolvedor nodejs", "desenvolvedor typescript", "backend developer", "full-stack node"];
 
 		for (let i in searchArray) {
 			console.log("looking for", searchArray[i])
 			await linkedin.search(searchArray[i]);
-			await linkedin.scrape(2);
+			await linkedin.scrape(5);
 		}
 
 		console.log("Done!");

@@ -4,4 +4,5 @@ export type Job = {
 	company: string;
 	url: string;
 	jobDescription: string;
+	jobId: string;
 };

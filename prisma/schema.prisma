@@ -9,6 +9,7 @@ datasource db {
 
 model Job {
   id             Int      @id @default(autoincrement())
+  jobId          String
   url            String   @unique
   time           String
   local          String
@@ -16,6 +17,5 @@ model Job {
   jobDescription String
   key_words      String?
   createdAt      DateTime @default(now())
-  approved       Boolean  @default(false)
-  analyzed       Boolean  @default(false)
+  applied        Boolean  @default(false)
 }

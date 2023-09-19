@@ -25,9 +25,9 @@ export default class Linkedin {
 	}
 
 	private async save(data: Job) {
-		const hasOnDb = await this.prisma.job.findUnique({
+		const hasOnDb = await this.prisma.job.findFirst({
 			where: {
-				url: data.url,
+				jobId: data.jobId,
 			},
 		});
 		if (hasOnDb || !this.filterJobs(data)) return;
@@ -103,6 +103,7 @@ export default class Linkedin {
 		const job: Job = {
 			...jobInfo,
 			url: jobUrl,
+			jobId: id,
 		};
 		await this.save(job);
 	}
